@@ -1,10 +1,14 @@
 {
-    "summary": "The reviews present mixed feedback. One reviewer criticized the food quality, particularly poor ingredient portions in a takeout order. Another reviewer praised the excellent customer service, friendly staff, and quick service. A third reviewer expressed dissatisfaction but did not specify any details.",
-    "next_action": "Improve consistency in food preparation and ingredient portions, especially for takeout orders. Continue reinforcing strong customer service. Consider reaching out to dissatisfied customers for more specific feedback to identify areas for improvement.",
+    "summary": 
+        "The reviews present mixed feedback. One reviewer criticized the food quality, particularly poor ingredient portions in a takeout order. Another reviewer praised the excellent customer service, friendly staff, and quick service. A third reviewer expressed dissatisfaction but did not specify any details.",
+    "next_action": 
+        "Improve consistency in food preparation and ingredient portions, especially for takeout orders. Continue reinforcing strong customer service. Consider reaching out to dissatisfied customers for more specific feedback to identify areas for improvement.",
+    "categories": {
     "product_quality": 10,
     "customer_service": 7,
     "pricing": 5,
     "atmosphere_environment": 3,
     "location_accessibility": 4,
     "suggestions": 6
+    }
 }
