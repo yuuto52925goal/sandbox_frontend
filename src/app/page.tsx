@@ -1,10 +1,9 @@
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import { BarChart } from "lucide-react";
 import Menubar from "../components/ui/Menubar"
 import "./page.module.css"
 import "./page.css"
-import DynamicPieChart from "@/components/DynamicPieChart";
+import DynamicPieChart, { PieChartData } from "@/components/DynamicPieChart";
 
 const data = {
   summary:
@@ -19,6 +18,45 @@ const data = {
     "Location/Accessibility": 4,
     "Suggestions": 6,
   },
+};
+
+const pieChartData: Record<string, PieChartData[]> = {
+  "Product/Service Quality": [
+    { name: "Group A", value: 400 },
+    { name: "Group B", value: 300 },
+    { name: "Group C", value: 300 },
+    { name: "Group D", value: 200 },
+  ],
+  "Customer Service": [
+    { name: "Group A", value: 400 },
+    { name: "Group B", value: 300 },
+    { name: "Group C", value: 300 },
+    { name: "Group D", value: 200 },
+  ],
+  "Pricing": [
+    { name: "Group A", value: 400 },
+    { name: "Group B", value: 300 },
+    { name: "Group C", value: 300 },
+    { name: "Group D", value: 200 },
+  ],
+  "Atmosphere/Environment": [
+    { name: "Group A", value: 400 },
+    { name: "Group B", value: 300 },
+    { name: "Group C", value: 300 },
+    { name: "Group D", value: 200 },
+  ],
+  "Location/Accessibility": [
+    { name: "Group A", value: 500 },
+    { name: "Group B", value: 300 },
+    { name: "Group C", value: 300 },
+    { name: "Group D", value: 200 },
+  ],
+  "Suggestions": [
+    { name: "Group A", value: 200 },
+    { name: "Group B", value: 300 },
+    { name: "Group C", value: 300 },
+    { name: "Group D", value: 200 },
+  ],
 };
 
 export default function Dashboard() {
@@ -41,7 +79,7 @@ export default function Dashboard() {
           {Object.entries(data.categories).map(([category, count]) => (
             <Card key={category}>
               <CardHeader className="flex items-center gap-2 text-lg font-semibold">
-                <DynamicPieChart/>
+                <DynamicPieChart piecharData={pieChartData[category] || pieChartData["Suggestions"]}/>
                 <BarChart size={20} /> {category}
               </CardHeader>
               <CardContent>
@@ -50,7 +88,7 @@ export default function Dashboard() {
                     <span>{category}</span>
                     <span>{count}</span>
                   </div>
-                  <Progress value={(count / 10) * 100} className="h-2 bg-gray-200" />
+                  {/* <Progress value={(count / 10) * 100} className="h-2 bg-gray-200" /> */}
                 </div>
               </CardContent>
             </Card>
