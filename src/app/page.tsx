@@ -4,6 +4,7 @@ import Menubar from "../components/ui/Menubar"
 import "./page.module.css"
 import "./page.css"
 import DynamicPieChart, { PieChartData } from "@/components/DynamicPieChart";
+import { useEffect, useState } from "react";
 
 const data = {
   summary:
@@ -60,13 +61,34 @@ const pieChartData: Record<string, PieChartData[]> = {
 };
 
 export default function Dashboard() {
+  const [analyze_result, setAnalyzeResult] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchAnalyzeData = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/analysis/get_analyze_result", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ company_id: 3 }),
+        });
+        const data = await response.json();
+        setAnalyzeResult(data);
+      } catch (error) {
+        console.error("Error fetching analyze data: ", error);
+      }
+    }
+  }, []);
+
+
   return (
     <div className="flex flex_row">
       <Menubar/>
-      <div className="dashboard-container h-screen p-6 flex flex-col gap-6">
-        <h2 className="text-4xl font-bold pt-8 pb-6">Perfomance Overview</h2>
-        <div className="flex flex_row place-content-between gap-25 pr-10 pl-10 pb-4">
-          <Card className=" flex-1 col-span-1 md:col-span-2">
+      <div className="flex flex-col h-screen p-6 dashboard-container gap-6">
+        <h2 className="text-4xl font-bold pb-6 pt-8">Perfomance Overview</h2>
+        <div className="flex flex_row gap-25 pb-4 pl-10 place-content-between pr-10">
+          <Card className="col-span-1 flex-1 md:col-span-2">
             <CardHeader className="text-xl font-bold">Review Summary</CardHeader>
             <CardContent className="text-lg">{data.summary}</CardContent>
           </Card>
@@ -75,10 +97,10 @@ export default function Dashboard() {
             <CardContent className="text-lg">{data.next_action}</CardContent>
           </Card>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {Object.entries(data.categories).map(([category, count]) => (
             <Card key={category}>
-              <CardHeader className="flex items-center gap-2 text-lg font-semibold">
+              <CardHeader className="flex text-lg font-semibold gap-2 items-center">
                 <DynamicPieChart piecharData={pieChartData[category] || pieChartData["Suggestions"]}/>
                 <BarChart size={20} /> {category}
               </CardHeader>
@@ -88,7 +110,7 @@ export default function Dashboard() {
                     <span>{category}</span>
                     <span>{count}</span>
                   </div>
-                  {/* <Progress value={(count / 10) * 100} className="h-2 bg-gray-200" /> */}
+                  {/* <Progress value={(count / 10) * 100} className="bg-gray-200 h-2" /> */}
                 </div>
               </CardContent>
             </Card>
