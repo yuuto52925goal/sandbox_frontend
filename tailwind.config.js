@@ -13,6 +13,8 @@ module.exports = {
           'accent-secondary': 'var(--accent-secondary)',
           'accent-tertiary': 'var(--accent-tertiary)',
           'text-primary': 'var(--text-primary)',
+          'grey-sub': 'var(--grey-sub)',
+          'grey-main': 'var(--grey-main)'
         },
       },
     },
