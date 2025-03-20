@@ -6,52 +6,15 @@ import Menubar from "../components/ui/Menubar"
 import "./page.module.css"
 import "./page.css"
 import DynamicPieChart, { PieChartData } from "@/components/DynamicPieChart";
-import { useEffect, useState } from "react";
-
-const pieChartData: Record<string, PieChartData[]> = {
-  "Product/Service Quality": [
-    { name: "Group A", value: 400 },
-    { name: "Group B", value: 300 },
-    { name: "Group C", value: 300 },
-    { name: "Group D", value: 200 },
-  ],
-  "Customer Service": [
-    { name: "Group A", value: 400 },
-    { name: "Group B", value: 300 },
-    { name: "Group C", value: 300 },
-    { name: "Group D", value: 200 },
-  ],
-  "Pricing": [
-    { name: "Group A", value: 400 },
-    { name: "Group B", value: 300 },
-    { name: "Group C", value: 300 },
-    { name: "Group D", value: 200 },
-  ],
-  "Atmosphere/Environment": [
-    { name: "Group A", value: 400 },
-    { name: "Group B", value: 300 },
-    { name: "Group C", value: 300 },
-    { name: "Group D", value: 200 },
-  ],
-  "Location/Accessibility": [
-    { name: "Group A", value: 500 },
-    { name: "Group B", value: 300 },
-    { name: "Group C", value: 300 },
-    { name: "Group D", value: 200 },
-  ],
-  "Suggestions": [
-    { name: "Group A", value: 200 },
-    { name: "Group B", value: 300 },
-    { name: "Group C", value: 300 },
-    { name: "Group D", value: 200 },
-  ],
-};
+import { useEffect, useMemo, useState } from "react";
 
 export default function Dashboard() {
 
-  const categories = ["atmosphere", "location", "price", "quality", "service", "suggestions"]
+  const categories = useMemo(() => ["atmosphere", "location", "price", "quality", "service", "suggestions"], [])
 
   const [analyze_result, setAnalyzeResult] = useState<any>(null);
+  const [pieAnalyzeResult, setPieAnalyzeResult] = useState<Record<string, PieChartData[]>>({})
+  const [currentCompany, setCorrentCompany] = useState<number>(3)
 
   useEffect(() => {
     const fetchAnalyzeData = async () => {
@@ -65,14 +28,21 @@ export default function Dashboard() {
         });
         const analyzeData = await response.json();
         console.log(analyzeData.result)
-        console.log(analyzeData.result[`negative_${categories[0]}`])
+        const transformedData: Record<string, PieChartData[]> = {};
+        categories.forEach((category) => {
+          transformedData[category] = [
+            { name: "Negative", value: analyzeData.result[`negative_${category}`] },
+            { name: "Positive", value: analyzeData.result[`positive_${category}`] },
+          ];
+        });
+        setPieAnalyzeResult(transformedData)
         setAnalyzeResult(analyzeData.result);
       } catch (error) {
         console.error("Error fetching analyze data: ", error);
       }
     }
     fetchAnalyzeData()
-  }, []);
+  }, [currentCompany, categories]);
 
 
   return (
@@ -91,10 +61,10 @@ export default function Dashboard() {
           </Card>
         </div>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          {categories.map( (category) => (
-            <Card key={category + ""}>
+          {categories.map( (category, index) => (
+            <Card key={category + index}>
               <CardHeader className="flex text-lg font-semibold gap-2 items-center">
-                <DynamicPieChart piecharData={pieChartData["Suggestions"]}/>
+                <DynamicPieChart piecharData={pieAnalyzeResult[category]}/>
                 <BarChart size={20} /> 
                 {/* <div className="max-w-3xs">
                   {category}
