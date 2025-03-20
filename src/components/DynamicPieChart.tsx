@@ -26,7 +26,7 @@ const DynamicPieChart = ({ piecharData }: PieChartProps) => {
           dataKey="value"
           label
         >
-          {piecharData.map((_, index) => (
+          {piecharData?.map((_, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
           ))}
         </Pie>
